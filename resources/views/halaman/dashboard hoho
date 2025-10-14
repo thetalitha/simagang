@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard Content - Monitoring Peserta Magang</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        body {
+            background-color: #f8f9fc;
+            padding: 20px;
+        }
+        
+        .countdown-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            border-radius: 10px;
+        }
+        
+        .countdown-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .countdown-circle {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 15px;
+            position: relative;
+        }
+        
+        .countdown-circle svg {
+            transform: rotate(-90deg);
+        }
+        
+        .countdown-circle circle {
+            fill: none;
+            stroke-width: 8;
+        }
+        
+        .countdown-circle .bg {
+            stroke: rgba(255,255,255,0.2);
+        }
+        
+        .countdown-circle .progress {
+            stroke: #a8ff78;
+            stroke-linecap: round;
+        }
+        
+        .countdown-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .room-card {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid;
+            border-radius: 8px;
+        }
+        
+        .room-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+        }
+        
+        .room-card.technical {
+            border-left-color: #4e73df;
+        }
+        
+        .room-card.marketing {
+            border-left-color: #1cc88a;
+        }
+        
+        .room-card.finance {
+            border-left-color: #36b9cc;
+        }
+        
+        .room-card.hr {
+            border-left-color: #f6c23e;
+        }
+        
+        .chart-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58,59,69,.15);
+            margin-bottom: 20px;
+        }
+        
+        .chart-bar {
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+        
+        .chart-bar:hover {
+            opacity: 0.8;
+        }
+        
+        .table-hover tbody tr:hover {
+            background-color: #f8f9fc;
+            cursor: pointer;
+        }
+        
+        .page-heading {
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            color: #5a5c69;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .card {
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58,59,69,.15);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+        <!-- Page Heading -->
+        <div class="page-heading">
+            <h1 class="h3 mb-2 text-gray-800">Dashboard Monitoring Peserta Magang</h1>
+            <p class="mb-0 text-muted">Real-time monitoring peserta magang berdasarkan room, periode, dan institut</p>
+        </div>
+
+        <!-- Room Cards Row -->
+        <h5 class="section-title">Jumlah Peserta Berdasarkan Room</h5>
+        <div class="row mb-4">
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card room-card technical h-100 py-2" onclick="showRoomDetail('Technical')">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Room Technical</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">13 Peserta</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-laptop-code fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card room-card marketing h-100 py-2" onclick="showRoomDetail('Marketing')">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Room Marketing</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">8 Peserta</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-bullhorn fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card room-card finance h-100 py-2" onclick="showRoomDetail('Finance')">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Room Finance</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">6 Peserta</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-chart-line fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card room-card hr h-100 py-2" onclick="showRoomDetail('HR')">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Room HR</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">5 Peserta</div>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-users fa-2x text-gray-300"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Countdown Period Row -->
+        <h5 class="section-title">Sisa Waktu Magang Per Periode</h5>
+        <p class="text-muted small mb-3">Klik card untuk melihat daftar peserta magang dalam periode tersebut</p>
+        <div class="row mb-4">
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="card countdown-card h-100" onclick="showPeriodDetail('Agustus - Januari', 50)">
+                    <div class="card-body text-center py-4">
+                        <div class="countdown-circle">
+                            <svg width="120" height="120">
+                                <circle class="bg" cx="60" cy="60" r="52"></circle>
+                                <circle class="progress" cx="60" cy="60" r="52" 
+                                        stroke-dasharray="327" 
+                                        stroke-dashoffset="98"></circle>
+                            </svg>
+                            <div class="countdown-text">50</div>
+                        </div>
+                        <h5 class="mb-1">Days Left</h5>
+                        <p class="mb-0">Periode Agustus - Januari</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="card countdown-card h-100" onclick="showPeriodDetail('Juni - September', 30)">
+                    <div class="card-body text-center py-4">
+                        <div class="countdown-circle">
+                            <svg width="120" height="120">
+                                <circle class="bg" cx="60" cy="60" r="52"></circle>
+                                <circle class="progress" cx="60" cy="60" r="52" 
+                                        stroke-dasharray="327" 
+                                        stroke-dashoffset="196"></circle>
+                            </svg>
+                            <div class="countdown-text">30</div>
+                        </div>
+                        <h5 class="mb-1">Days Left</h5>
+                        <p class="mb-0">Periode Juni - September</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-md-6 mb-4">
+                <div class="card countdown-card h-100" onclick="showPeriodDetail('Februari - Mei', 75)">
+                    <div class="card-body text-center py-4">
+                        <div class="countdown-circle">
+                            <svg width="120" height="120">
+                                <circle class="bg" cx="60" cy="60" r="52"></circle>
+                                <circle class="progress" cx="60" cy="60" r="52" 
+                                        stroke-dasharray="327" 
+                                        stroke-dashoffset="49"></circle>
+                            </svg>
+                            <div class="countdown-text">75</div>
+                        </div>
+                        <h5 class="mb-1">Days Left</h5>
+                        <p class="mb-0">Periode Februari - Mei</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="row">
+            <!-- Active Participants Chart -->
+            <div class="col-xl-6 col-lg-6 mb-4">
+                <div class="chart-container">
+                    <h6 class="m-0 font-weight-bold text-primary mb-3">
+                        <i class="fas fa-user-check mr-2"></i>Peserta Aktif Berdasarkan Institut
+                    </h6>
+                    <p class="text-muted small mb-3">Klik bar untuk melihat detail peserta</p>
+                    <canvas id="activeChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Completed Participants Chart -->
+            <div class="col-xl-6 col-lg-6 mb-4">
+                <div class="chart-container">
+                    <h6 class="m-0 font-weight-bold text-success mb-3">
+                        <i class="fas fa-user-graduate mr-2"></i>Peserta Selesai Berdasarkan Institut
+                    </h6>
+                    <p class="text-muted small mb-3">Klik bar untuk melihat detail peserta</p>
+                    <canvas id="completedChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trend Chart -->
+        <div class="row">
+            <div class="col-12">
+                <div class="chart-container">
+                    <h6 class="m-0 font-weight-bold text-info mb-3">
+                        <i class="fas fa-chart-line mr-2"></i>Grafik Jumlah Peserta Magang Per Periode
+                    </h6>
+                    <p class="text-muted small mb-3">Menampilkan tren jumlah peserta magang yang masuk setiap periode</p>
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.container-fluid -->
+
+    <!-- Modal for Room Details -->
+    <div class="modal fade" id="roomModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="roomModalTitle">
+                        <i class="fas fa-door-open mr-2"></i>Peserta Room
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama</th>
+                                    <th>Institut</th>
+                                    <th>Periode</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="roomTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Period Details -->
+    <div class="modal fade" id="periodModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                    <h5 class="modal-title" id="periodModalTitle">
+                        <i class="fas fa-calendar-alt mr-2"></i>Peserta Periode
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama</th>
+                                    <th>Institut</th>
+                                    <th>Room</th>
+                                    <th>Sisa Hari</th>
+                                </tr>
+                            </thead>
+                            <tbody id="periodTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Institut Details -->
+    <div class="modal fade" id="institutModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-info text-white">
+                    <h5 class="modal-title" id="institutModalTitle">
+                        <i class="fas fa-university mr-2"></i>Peserta dari Institut
+                    </h5>
+                    <button type="button" class="close text-white" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama</th>
+                                    <th>Room</th>
+                                    <th>Periode</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="institutTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+
+    <script>
+        // Dummy data - Ganti dengan data dari Laravel backend
+        const roomData = {
+            'Technical': [
+                {nama: 'Ahmad Rizki', institut: 'Universitas Indonesia', periode: 'Agustus - Januari', status: 'Aktif'},
+                {nama: 'Siti Nurhaliza', institut: 'ITB', periode: 'Agustus - Januari', status: 'Aktif'},
+                {nama: 'Budi Santoso', institut: 'UGM', periode: 'Juni - September', status: 'Aktif'},
+                {nama: 'Dewi Lestari', institut: 'Universitas Brawijaya', periode: 'Agustus - Januari', status: 'Aktif'},
+                {nama: 'Eko Prasetyo', institut: 'Universitas Airlangga', periode: 'Februari - Mei', status: 'Aktif'},
+                {nama: 'Fitri Handayani', institut: 'Universitas Indonesia', periode: 'Juni - September', status: 'Aktif'},
+                {nama: 'Galih Pratama', institut: 'UGM', periode: 'Agustus - Januari', status: 'Aktif'},
+                {nama: 'Hana Permata', institut: 'ITB', periode: 'Juni - September', status: 'Aktif'},
+                {nama: 'Irfan Setiawan', institut: 'Universitas Brawijaya', periode: 'Agustus - Januari', status: 'Aktif'},
+                {nama: 'Joko Widodo', institut: 'Universitas Airlangga', periode: 'Februari - Mei', status: 'Aktif'},
+                {nama: 'Kartika Sari', institut: 'UGM', periode: 'Juni - September', status: 'Aktif'},
+                {nama: 'Lina Marlina', institut: 'Universitas Indonesia', periode: 'Agustus - Januari', status: 'Aktif'},
+                {nama: 'Made Wirawan', institut: 'ITB', periode: 'Februari - Mei', status: 'Aktif'}
+            ],
+            'Marketing': [
+                {nama: 'Nina Kusuma', institut: 'Universitas Brawijaya', periode: 'Agustus - Januari', status: 'Aktif'},
+                {nama: 'Omar Bakri', institut: 'Universitas Airlangga', periode: 'Februari - Mei', status: 'Aktif'},
+                {nama: 'Putri Ayu', institut: 'Universitas Indonesia', periode: 'Juni - September', status: 'Aktif'},
+                {nama: 'Qori Sandika', institut: 'UGM', periode: 'Agustus - Januari', status: 'Aktif'},
+                {nama: 'Rina Susanti', institut: 'ITB', periode: 'Juni - September', status: 'Aktif'},
+                {nama: 'Sandi Permana', institut: 'Universitas Brawijaya', periode: 'Agustus - Januari', status: 'Aktif'},
+                {nama: 'Taufik Hidayat', institut: 'Universitas Airlangga', periode: 'Februari - Mei', status: 'Aktif'},
+                {nama: 'Umar Hadi', institut: 'UGM', periode: 'Juni - September', status: 'Aktif'}
+            ],
+            'Finance': [
+                {nama: 'Vina Melinda', institut: 'Universitas Indonesia', periode: 'Juni - September', status: 'Aktif'},
+                {nama: 'Wawan Setiawan', institut: 'ITB', periode: 'Agustus - Januari', status: 'Aktif'},
+                {nama: 'Xena Putri', institut: 'UGM', periode: 'Februari - Mei', status: 'Aktif'},
+                {nama: 'Yudi Prasetyo', institut: 'Universitas Brawijaya', periode: 'Juni - September', status: 'Aktif'},
+                {nama: 'Zahra Amalia', institut: 'Universitas Airlangga', periode: 'Agustus - Januari', status: 'Aktif'},
+                {nama: 'Andi Wijaya', institut: 'Universitas Indonesia', periode: 'Februari - Mei', status: 'Aktif'}
+            ],
+            'HR': [
+                {nama: 'Bayu Saputra', institut: 'UGM', periode: 'Agustus - Januari', status: 'Aktif'},
+                {nama: 'Citra Dewi', institut: 'ITB', periode: 'Juni - September', status: 'Aktif'},
+                {nama: 'Doni Hermawan', institut: 'Universitas Brawijaya', periode: 'Agustus - Januari', status: 'Aktif'},
+                {nama: 'Eka Saputri', institut: 'Universitas Airlangga', periode: 'Februari - Mei', status: 'Aktif'},
+                {nama: 'Fajar Rahman', institut: 'Universitas Indonesia', periode: 'Juni - September', status: 'Aktif'}
+            ]
+        };
+
+        const periodData = {
+            'Agustus - Januari': [
+                {nama: 'Ahmad Rizki', institut: 'Universitas Indonesia', room: 'Technical', sisaHari: 50},
+                {nama: 'Siti Nurhaliza', institut: 'ITB', room: 'Technical', sisaHari: 50},
+                {nama: 'Dewi Lestari', institut: 'Universitas Brawijaya', room: 'Technical', sisaHari: 50},
+                {nama: 'Galih Pratama', institut: 'UGM', room: 'Technical', sisaHari: 50},
+                {nama: 'Irfan Setiawan', institut: 'Universitas Brawijaya', room: 'Technical', sisaHari: 50},
+                {nama: 'Lina Marlina', institut: 'Universitas Indonesia', room: 'Technical', sisaHari: 50},
+                {nama: 'Nina Kusuma', institut: 'Universitas Brawijaya', room: 'Marketing', sisaHari: 50},
+                {nama: 'Qori Sandika', institut: 'UGM', room: 'Marketing', sisaHari: 50},
+                {nama: 'Sandi Permana', institut: 'Universitas Brawijaya', room: 'Marketing', sisaHari: 50},
+                {nama: 'Wawan Setiawan', institut: 'ITB', room: 'Finance', sisaHari: 50},
+                {nama: 'Zahra Amalia', institut: 'Universitas Airlangga', room: 'Finance', sisaHari: 50},
+                {nama: 'Bayu Saputra', institut: 'UGM', room: 'HR', sisaHari: 50},
+                {nama: 'Doni Hermawan', institut: 'Universitas Brawijaya', room: 'HR', sisaHari: 50}
+            ],
+            'Juni - September': [
+                {nama: 'Budi Santoso', institut: 'UGM', room: 'Technical', sisaHari: 30},
+                {nama: 'Fitri Handayani', institut: 'Universitas Indonesia', room: 'Technical', sisaHari: 30},
+                {nama: 'Hana Permata', institut: 'ITB', room: 'Technical', sisaHari: 30},
+                {nama: 'Kartika Sari', institut: 'UGM', room: 'Technical', sisaHari: 30},
+                {nama: 'Putri Ayu', institut: 'Universitas Indonesia', room: 'Marketing', sisaHari: 30},
+                {nama: 'Rina Susanti', institut: 'ITB', room: 'Marketing', sisaHari: 30},
+                {nama: 'Umar Hadi', institut: 'UGM', room: 'Marketing', sisaHari: 30},
+                {nama: 'Vina Melinda', institut: 'Universitas Indonesia', room: 'Finance', sisaHari: 30},
+                {nama: 'Yudi Prasetyo', institut: 'Universitas Brawijaya', room: 'Finance', sisaHari: 30},
+                {nama: 'Citra Dewi', institut: 'ITB', room: 'HR', sisaHari: 30},
+                {nama: 'Fajar Rahman', institut: 'Universitas Indonesia', room: 'HR', sisaHari: 30}
+            ],
+            'Februari - Mei': [
+                {nama: 'Eko Prasetyo', institut: 'Universitas Airlangga', room: 'Technical', sisaHari: 75},
+                {nama: 'Joko Widodo', institut: 'Universitas Airlangga', room: 'Technical', sisaHari: 75},
+                {nama: 'Made Wirawan', institut: 'ITB', room: 'Technical', sisaHari: 75},
+                {nama: 'Omar Bakri', institut: 'Universitas Airlangga', room: 'Marketing', sisaHari: 75},
+                {nama: 'Taufik Hidayat', institut: 'Universitas Airlangga', room: 'Marketing', sisaHari: 75},
+                {nama: 'Xena Putri', institut: 'UGM', room: 'Finance', sisaHari: 75},
+                {nama: 'Andi Wijaya', institut: 'Universitas Indonesia', room: 'Finance', sisaHari: 75},
+                {nama: 'Eka Saputri', institut: 'Universitas Airlangga', room: 'HR', sisaHari: 75}
+            ]
+        };
+
+        const institutActiveData = {
+            'Universitas Indonesia': [
+                {nama: 'Ahmad Rizki', room: 'Technical', periode: 'Agustus - Januari', status: 'Aktif'},
+                {nama: 'Fitri Handayani', room: 'Technical', periode: 'Juni - September', status: 'Aktif'},
+                {nama: 'Lina Marlina', room: 'Technical', periode: 'Agustus - Januari', status: 'Aktif'},
+                {nama: 'Putri Ayu', room: 'Marketing', periode: 'Juni - September', status: 'Aktif'},
+                {nama: 'Vina Melinda', room: 'Finance', periode: 'Juni - September', status: 'Aktif'},
+                {nama: 'Andi Wijaya', room: 'Finance', periode: 'Februari - Mei', status: 'Aktif'},
+                {nama: 'Fajar Rahman', room: 'HR', periode: 'Juni - September', status: 'Aktif'}
+            ],
+            'ITB': [
+                {nama: 'Siti Nurhaliza', room: 'Technical', periode: 'Agustus - Januari', status: 'Aktif'},
+                {nama: 'Hana Permata', room: 'Technical', periode: 'Juni - September', status: 'Aktif'},
+                {nama: 'Made Wirawan', room: 'Technical', periode: 'Februari - Mei', status: 'Aktif'},
+                {nama: 'Rina Susanti', room: 'Marketing', periode: 'Juni - September', status: 'Aktif'},
+                {nama: 'Wawan Setiawan', room: 'Finance', periode: 'Agustus - Januari', status: 'Aktif'},
+                {nama: 'Citra Dewi', room: 'HR', periode: 'Juni - September', status: 'Aktif'}
+            ],
+            'UGM': [
+                {nama: 'Budi Santoso', room: 'Technical', periode: 'Juni - September', status: 'Aktif'},
+                {nama: 'Galih Pratama', room: 'Technical', periode: 'Agustus - Januari', status: 'Aktif'},
+                {nama: 'Kartika Sari', room: 'Technical', periode: 'Juni - September', status: 'Aktif'},
+                {nama: 'Qori Sandika', room: 'Marketing', periode: 'Agustus - Januari', status: 'Aktif'},
+                {nama: 'Umar Hadi', room: 'Marketing', periode: 'Juni - September', status: 'Aktif'},
+                {nama: 'Xena Putri', room: 'Finance', periode: 'Februari - Mei', status: 'Aktif'},]}
