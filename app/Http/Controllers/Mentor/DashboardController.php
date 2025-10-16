@@ -50,6 +50,7 @@ class DashboardController extends Controller
             $allPesertaSelesai = $allPesertaSelesai->merge($pesertaCompleted);
         }
         
+        //testingkjsdhwhka
         // Total peserta aktif
         $totalPeserta = $allPeserta->count();
         
