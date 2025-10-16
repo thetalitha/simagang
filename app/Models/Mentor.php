@@ -9,8 +9,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Mentor extends Model
 {
     use HasFactory;
-    protected $table = 'Mentor'; 
+    protected $table = 'mentor'; 
+    protected $primaryKey = 'mentor_id';
 
+    protected $fillable = [
+        'mentor_id',
+        'handphone',
+    ];
+    
     public function user()
     {
         return $this->belongsTo(User::class, 'mentor_id', 'id');

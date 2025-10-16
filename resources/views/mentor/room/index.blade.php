@@ -66,7 +66,7 @@
                     
                     <!-- Action Buttons -->
                     <div class="col-md-4 d-flex flex-column justify-content-center align-items-end">
-                        <a href="#" class="btn-action btn-action-primary mb-2 w-100">
+                        <a href="{{ route('mentor.room.show', $room->room_id) }}" class="btn-action btn-action-primary mb-2 w-100">
                             <i class="fas fa-eye mr-2"></i>
                             Lihat Detail
                         </a>

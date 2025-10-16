@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\MateriController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\RoomController;
+use App\Http\Controllers\Mentor\RoomViewController as MentorRoomViewController;
 use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
 use App\Http\Controllers\Mentor\MateriController as MentorMateriController;
 use App\Http\Controllers\Mentor\PesertaController as MentorPesertaController;
@@ -64,6 +65,18 @@ Route::middleware(['MidLogin:mentor'])->group(function(){
     Route::get('mentor/room', [MentorRoomController::class, 'index'])->name('mentor.room');
     Route::get('mentor/room/create', [MentorRoomController::class, 'create'])->name('mentor.roomCreate');
     Route::post('mentor/room/store', [MentorRoomController::class, 'store'])->name('mentor.roomStore');
+
+    Route::prefix('mentor')->name('mentor.')->group(function () {
+        Route::get('/room/{room_id}', [MentorRoomViewController::class, 'show'])->name('room.show');
+        
+        // API untuk get data
+        Route::get('/room/{room_id}/participants', [MentorRoomViewController::class, 'getParticipants']);
+        Route::get('/room/{room_id}/tasks', [MentorRoomViewController::class, 'getTasks']);
+        
+        // API untuk create task
+        Route::post('/room/{room_id}/tasks', [MentorRoomViewController::class, 'storeTask']);
+
+    });
     
     // Peserta Mentor
     // Route::get('mentor/peserta', [MentorPesertaController:class, 'mentorPeserta'])->name('mentor.peserta');
@@ -79,17 +92,15 @@ Route::middleware(['MidLogin:peserta'])->group(function(){
 
     Route::prefix('peserta')->name('peserta.')->group(function () {
 
-        // Daftar semua materi
-        Route::get('/materials', [PesertaMateriController::class, 'index'])
-            ->name('materials');
-
-        // Lihat detail satu materi
-        Route::get('/materials/{materi_id}', [PesertaMateriController::class, 'view'])
-            ->name('materials.view');
-
-        // Download file materi
-        Route::get('/materials/{materi_id}/download', [PesertaMateriController::class, 'download'])
-            ->name('materials.download');
+         Route::get('/rooms/{room_id}', [MentorRoomViewController::class, 'show'])
+            ->name('mentor.room.show'); 
+        
+        // API untuk get data
+        Route::get('/rooms/{room_id}/participants', [MentorRoomViewController::class, 'getParticipants']);
+        Route::get('/rooms/{room_id}/tasks', [MentorRoomViewController::class, 'getTasks']);
+        
+        // API untuk create task
+        Route::post('/rooms/{room_id}/tasks', [MentorRoomViewController::class, 'storeTask']);
     });
 
  
